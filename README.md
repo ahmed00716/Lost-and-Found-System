@@ -21,4 +21,3 @@ testing.
 
 ## 📬 Contact
 **Ahmed Badyan** - [badyan72020@gmail.com]
-* **Version Control:** Git & GitHub
