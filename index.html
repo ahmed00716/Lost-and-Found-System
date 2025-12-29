@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Find What's Lost, Return What's Found</h1>
+            <p class="col-md-8 fs-4">Welcome to the central platform for lost and found items.</p>
+        </div>
+    </div>
+
+    <h2 class="text-center mb-4">Reported Items</h2>
+
+    <div class="row mb-4 justify-content-center">
+        <div class="col-md-8">
+             <form method="GET" action="{{ url_for('home') }}">
+                 <div class="input-group mb-3">
+                     <input type="text" class="form-control" placeholder="Search item name or description..." name="search" value="{{ search_query or '' }}">
+                     {% if current_status %}<input type="hidden" name="filter" value="{{ current_status }}">{% endif %}
+                     {% if current_category %}<input type="hidden" name="category" value="{{ current_category }}">{% endif %}
+                     {% if current_sort %}<input type="hidden" name="sort" value="{{ current_sort }}">{% endif %}
+                     {% if current_timeframe %}<input type="hidden" name="timeframe" value="{{ current_timeframe }}">{% endif %}
+                     <button class="btn btn-primary" type="submit">Search</button>
+                 </div>
+             </form>
+        </div>
+    </div>
+
+    <div class="row mb-3 justify-content-center">
+        <div class="col-md-10 text-center">
+             <small class="text-muted d-block mb-1">Sort by:</small>
+             <div class="btn-group" role="group">
+                 <a href="{{ url_for('home', sort='newest', filter=current_status, category=current_category, timeframe=current_timeframe, search=search_query) }}"
+                    class="btn btn-sm btn-outline-dark {% if current_sort == 'newest' or not current_sort %}active{% endif %}">Newest First</a>
+                 <a href="{{ url_for('home', sort='oldest', filter=current_status, category=current_category, timeframe=current_timeframe, search=search_query) }}"
+                    class="btn btn-sm btn-outline-dark {% if current_sort == 'oldest' %}active{% endif %}">Oldest First</a>
+             </div>
+        </div>
+    </div>
+    
+    <div class="row mb-3 justify-content-center">
+        <div class="col-md-10 text-center">
+             <small class="text-muted d-block mb-1">Filter by Time:</small>
+             <div class="btn-group" role="group">
+                 <a href="{{ url_for('home', sort=current_sort, filter=current_status, category=current_category, search=search_query) }}"
+                    class="btn btn-sm btn-outline-primary {% if not current_timeframe %}active{% endif %}">All Time</a>
+                 <a href="{{ url_for('home', timeframe='day', sort=current_sort, filter=current_status, category=current_category, search=search_query) }}"
+                    class="btn btn-sm btn-outline-primary {% if current_timeframe == 'day' %}active{% endif %}">Last 24 Hours</a>
+                 <a href="{{ url_for('home', timeframe='week', sort=current_sort, filter=current_status, category=current_category, search=search_query) }}"
+                    class="btn btn-sm btn-outline-primary {% if current_timeframe == 'week' %}active{% endif %}">Last Week</a>
+                 <a href="{{ url_for('home', timeframe='month', sort=current_sort, filter=current_status, category=current_category, search=search_query) }}"
+                    class="btn btn-sm btn-outline-primary {% if current_timeframe == 'month' %}active{% endif %}">Last Month</a>
+             </div>
+        </div>
+    </div>
+
+    <div class="row mb-4 justify-content-center">
+        <div class="col-md-10">
+            <div class="text-center mb-3">
+                <small class="text-muted d-block mb-1">Filter by Status:</small>
+                <div class="btn-group" role="group">
+                    <a href="{{ url_for('home', search=search_query, category=current_category, sort=current_sort, timeframe=current_timeframe) }}"
+                       class="btn btn-outline-secondary {% if not current_status %}active{% endif %}">All Statuses</a>
+                    <a href="{{ url_for('home', filter='lost', search=search_query, category=current_category, sort=current_sort, timeframe=current_timeframe) }}"
+                       class="btn btn-outline-secondary {% if current_status == 'lost' %}active{% endif %}">Lost</a>
+                    <a href="{{ url_for('home', filter='found', search=search_query, category=current_category, sort=current_sort, timeframe=current_timeframe) }}"
+                       class="btn btn-outline-secondary {% if current_status == 'found' %}active{% endif %}">Found</a>
+                </div>
+            </div>
+            {% if categories %}
+            <div class="text-center">
+                 <small class="text-muted d-block mb-1">Filter by Category:</small>
+                <div class="btn-group flex-wrap justify-content-center" role="group">
+                    <a href="{{ url_for('home', search=search_query, filter=current_status, sort=current_sort, timeframe=current_timeframe) }}"
+                       class="btn btn-outline-info m-1 {% if not current_category %}active{% endif %}">All Categories</a>
+                    {% for category in categories %}
+                    <a href="{{ url_for('home', category=category, search=search_query, filter=current_status, sort=current_sort, timeframe=current_timeframe) }}"
+                       class="btn btn-outline-info m-1 {% if current_category == category %}active{% endif %}">{{ category }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        {% for item in items %} 
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {{ item.name }}
+                        {% if item.status == 'found' %} <span class="badge bg-success float-end">Found</span> {% else %} <span class="badge bg-danger float-end">Lost</span> {% endif %}
+                    </h5>
+                    {% if item.filename %}
+                        {% set parts = item.filename.rsplit('.', 1) %}; {% set name_part = parts[0] %}; {% set extension = parts[1].lower() %}
+                        {% if extension in ['png', 'jpg', 'jpeg', 'gif'] %}
+                            {% set thumb_filename = name_part + '_thumb.' + extension %}
+                            <img src="{{ url_for('uploaded_file', filename=thumb_filename) }}"
+                                 onerror="this.onerror=null; this.src='{{ url_for('uploaded_file', filename=item.filename) }}';"
+                                 class="card-img-top mb-2" alt="{{ item.name }}" style="max-height: 200px; object-fit: cover;">
+                        {% else %}
+                            <p class="card-text"><a href="{{ url_for('uploaded_file', filename=item.filename) }}" target="_blank">View Attached Document</a></p>
+                        {% endif %}
+                    {% endif %}
+                    <p class="card-text">{{ item.description }}</p>
+                    <p class="card-text"><small class="text-muted">Location: {{ item.location }}</small></p>
+                    <p class="card-text"><small class="text-muted">Category: {{ item.category }}</small></p>
+                    <p class="card-text"><small class="text-muted">Reported by: {{ item.owner.username }}</small></p>
+                    <p class="card-text"><small class="text-muted">Reported on: {{ item.date_reported.strftime('%Y-%m-%d %H:%M') }}</small></p>
+                    <a href="{{ url_for('item_details', item_id=item.id) }}" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+            <div class="col-12 text-center">
+                <p class="lead text-muted">No items match your current filters or search.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+          <a class="page-link" href="{{ url_for('home', page=pagination.prev_num, filter=current_status, category=current_category, sort=current_sort, timeframe=current_timeframe, search=search_query) }}">Previous</a>
+        </li>
+        {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+          {% if page_num %}
+            {% if pagination.page == page_num %}
+              <li class="page-item active" aria-current="page">
+                <span class="page-link">{{ page_num }}</span>
+              </li>
+            {% else %}
+              <li class="page-item">
+                <a class="page-link" href="{{ url_for('home', page=page_num, filter=current_status, category=current_category, sort=current_sort, timeframe=current_timeframe, search=search_query) }}">{{ page_num }}</a>
+              </li>
+            {% endif %}
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+          {% endif %}
+        {% endfor %}
+        <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
+          <a class="page-link" href="{{ url_for('home', page=pagination.next_num, filter=current_status, category=current_category, sort=current_sort, timeframe=current_timeframe, search=search_query) }}">Next</a>
+        </li>
+      </ul>
+    </nav>
+
+{% endblock %}

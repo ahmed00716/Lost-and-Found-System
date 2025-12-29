@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Item{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2>Edit Item</h2>
+        <form method="POST">
+            <div class="mb-3">
+                <label for="itemName" class="form-label">Item Name</label>
+                <input type="text" class="form-control" id="itemName" name="item_name" value="{{ item.name }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="itemDescription" class="form-label">Description</label>
+                <textarea class="form-control" id="itemDescription" rows="4" name="item_description" required>{{ item.description }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="location" class="form-label">Location</label>
+                <input type="text" class="form-control" id="location" name="item_location" value="{{ item.location }}" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

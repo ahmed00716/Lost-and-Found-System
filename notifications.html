@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}My Notifications{% endblock %}
+
+{% block content %}
+<h1>Notifications</h1>
+<p class="lead">Potential item matches found by the system.</p>
+
+{% if notifications %}
+    {% for notification in notifications %}
+    <div class="card mb-3 {% if not notification.is_read %}border-primary{% endif %}">
+        <div class="card-body">
+            <h5 class="card-title text-success">Potential Match Found!</h5>
+            <p class="card-text">
+                لقد وجد النظام غرضاً، **"{{ notification.matched_item.name }}"**، يطابق غرضك المفقود، **"{{ notification.reported_item.name }}"**.
+            </p>
+            <p class="card-text">
+                <small class="text-muted">Similarity Score: {{ "%.2f"|format(notification.score) }}</small>
+            </p>
+            <a href="{{ url_for('item_details', item_id=notification.matched_item_id) }}" class="btn btn-primary btn-sm">View Match Details</a>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="alert alert-info mt-4">
+        You have no notifications yet.
+    </div>
+{% endif %}
+{% endblock %}

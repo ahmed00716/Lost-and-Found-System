@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Potential Match Found!</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6;">
+    <p>Hi {{ user.username }},</p>
+    <p>Good news! An item was just reported on the Lost & Found platform that might be a match for one of your items.</p>
+    
+    <h3>Match Details:</h3>
+    <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px;">
+        <p><strong>Item:</strong> {{ item.name }}</p>
+        <p><strong>Status:</strong> {{ item.status.title() }}</p>
+        <p><strong>Location:</strong> {{ item.location }}</p>
+        <p><strong>Description:</strong> {{ item.description }}</p>
+    </div>
+
+    <p style="margin-top: 20px;">
+        Please log in to your account and click the link below to view the full details and contact the reporter.
+    </p>
+    
+    <a href="{{ url_for('item_details', item_id=item.id, _external=True) }}" 
+       style="background-color: #0d6efd; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; display: inline-block;">
+       View Item Details
+    </a>
+
+    <p style="margin-top: 20px;">
+        Thank you,<br>
+        The Lost & Found Team
+    </p>
+</body>
+</html>

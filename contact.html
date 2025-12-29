@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h1 class="mb-4 text-center">Contact and Support</h1>
+        <p class="lead text-center">Please use the support email for all general inquiries. For technical issues, you may contact the specialized team member listed below.</p>
+        
+        <hr class="my-4">
+
+        <div class="card p-4 mt-4 shadow-sm border-primary">
+            <h4 class="card-title text-primary mb-3"><i class="fas fa-headset me-2"></i> General Support & Inquiries</h4>
+            <p class="card-text"><strong>Email (Support):</strong> <a href="mailto:support@university.edu">support@university.edu</a></p>
+            <p class="card-text">All general questions regarding lost/found claims and basic functions should be directed here.</p>
+        </div>
+        
+        <h3 class="mt-5 mb-3">Technical Team Roles</h3>
+        
+        <div class="list-group">
+            
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>Ahmed Nasser Badyan</strong> (Project Leader)
+                    <p class="mb-1 text-muted small">Role: Database Management, System Architecture</p>
+                </div>
+                <small class="text-secondary"><i class="fas fa-envelope me-1"></i> ahmed.nasser.badyan@example.com</small>
+            </div>
+            
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                 <div>
+                    <strong>Abdulrahman Alyafai</strong> 
+                    <p class="mb-1 text-muted small">Role:Core Backend Logic , AI Matching System Support</p>  
+                </div>
+                <small class="text-secondary"><i class="fas fa-envelope me-1"></i> banhashem81@gmail.com</small>
+            </div>
+            
+             <div class="list-group-item d-flex justify-content-between align-items-center">
+                 <div>
+                    <strong>Osama Radman</strong> 
+                    <p class="mb-1 text-muted small">Role: User Interface (UI) and Design Issues</p>
+                </div>
+                <small class="text-secondary"><i class="fas fa-envelope me-1"></i> osama.radman@example.com</small>
+            </div>
+
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="{{ url_for('home') }}" class="btn btn-lg btn-outline-dark">Go to Homepage</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

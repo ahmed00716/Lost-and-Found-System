@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Report a Lost Item{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2>Report a Lost Item</h2>
+        <p class="text-muted">Fill out the form below with the details of the item you lost.</p>
+        
+        <form class="mt-4" method="POST" enctype="multipart/form-data"> 
+            <div class="mb-3"><label for="itemName" class="form-label">Item Name</label><input type="text" class="form-control" id="itemName" name="item_name" required></div>
+            <div class="mb-3"><label for="itemDescription" class="form-label">Description</label><textarea class="form-control" id="itemDescription" rows="4" name="item_description" required></textarea></div>
+            <div class="mb-3"><label for="locationLost" class="form-label">Last Seen Location</label><input type="text" class="form-control" id="locationLost" name="item_location" required></div>
+             
+            <div class="mb-3">
+                <label for="itemCategory" class="form-label">Category</label>
+                <select class="form-select" id="itemCategory" name="item_category" required>
+                    <option selected disabled value="">Choose...</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Keys">Keys</option>
+                    <option value="Books">Books</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Bags">Bags</option>
+                    <option value="ID Cards">ID Cards / Wallets</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label for="itemFile" class="form-label">Upload Image or Document (Optional)</label>
+                <input class="form-control" type="file" id="itemFile" name="item_file">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Submit Lost Item Report</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

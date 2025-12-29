@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}About Us{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <h1 class="mb-4 text-center">Our Mission</h1>
+        <p class="lead text-center">The Lost & Found Platform for University Students & Staff was created to solve the critical problem of inefficient property recovery within the university community.</p>
+        
+        <hr class="my-4">
+
+        <div class="card p-4 mt-4 shadow-sm">
+            <h3 class="text-primary mb-3">The Challenge & The Solution</h3>
+            <p><strong>Problem Statement:</strong> Traditional methods for recovering lost items (social media, physical offices) rely on inefficient means, leading to difficulties in retrieving property and a low chance of finding it.</p>
+            <p class="mt-3"><strong>Our Solution:</strong> We provide a centralized, unified, and reliable web platform that allows users to securely report and browse lost or found properties, fulfilling the need to facilitate and accelerate the return process.</p>
+        </div>
+        
+        <h3 class="mt-5 mb-3">Key Features</h3>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><i class="fas fa-clipboard-list me-2 text-success"></i> Centralized Reporting for Lost and Found Items.</li>
+            <li class="list-group-item"><i class="fas fa-lock me-2 text-success"></i> Secure Communication between the finder and owner (via email display after login).</li>
+            <li class="list-group-item"><i class="fas fa-brain me-2 text-success"></i> Smart Matching (AI) based on item description and category.</li>
+            <li class="list-group-item"><i class="fas fa-shield-alt me-2 text-success"></i> Admin Oversight for managing users and ensuring platform integrity.</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

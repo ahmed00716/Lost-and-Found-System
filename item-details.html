@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}{{ item.name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        {% if item.filename %}
+            {% set extension = item.filename.split('.')[-1].lower() %}
+            {% if extension in ['png', 'jpg', 'jpeg', 'gif'] %}
+                <img src="{{ url_for('uploaded_file', filename=item.filename) }}" class="img-fluid rounded shadow-sm mb-3" alt="{{ item.name }}">
+            {% else %}
+                <p class="mt-3"><a href="{{ url_for('uploaded_file', filename=item.filename) }}" class="btn btn-outline-secondary" target="_blank">Download Attached Document</a></p>
+                <img src="https://via.placeholder.com/600x400?text=Document+Attached" class="img-fluid rounded shadow-sm mb-3" alt="Document Placeholder">
+            {% endif %}
+        {% else %}
+            <img src="https://via.placeholder.com/600x400?text=No+Image" class="img-fluid rounded shadow-sm mb-3" alt="No Image Placeholder">
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <h2>
+            {{ item.name }}
+            {% if item.is_resolved %} <span class="badge bg-success">Resolved</span>
+            {% elif item.status == 'found' %} <span class="badge bg-info">Found</span>
+            {% else %} <span class="badge bg-danger">Lost</span>
+            {% endif %}
+        </h2>
+        <p class="text-muted">{{ item.description }}</p>
+        <ul class="list-group list-group-flush mt-4">
+            <li class="list-group-item"><strong>Location:</strong> {{ item.location }}</li>
+            <li class="list-group-item"><strong>Category:</strong> {{ item.category }}</li>
+            <li class="list-group-item"><strong>Status:</strong> {{ item.status.title() }}</li>
+            <li class="list-group-item"><strong>Reported by:</strong> {{ item.owner.username }}</li>
+             <li class="list-group-item"><strong>Reported on:</strong> {{ item.date_reported.strftime('%Y-%m-%d %H:%M') }}</li>
+        </ul>
+
+        {% if current_user.is_authenticated %}
+            <div class="alert alert-info mt-4">
+                To claim this item, please contact the reporter at: <strong>{{ item.owner.email }}</strong>
+            </div>
+        {% else %}
+            <div class="alert alert-warning mt-4">
+                Please <a href="{{ url_for('login') }}" class="alert-link">log in</a> to view contact information.
+            </div>
+        {% endif %}
+
+        {% if current_user.is_authenticated and current_user != item.owner and not item.is_resolved %}
+            <div class="mt-3">
+                {% if already_reported %}
+                    <button class="btn btn-outline-secondary btn-sm" disabled>Already Reported</button>
+                {% else %}
+                    <form action="{{ url_for('report_item', item_id=item.id) }}" method="POST">
+                        <button type="submit" class="btn btn-outline-danger btn-sm">Report this item</button>
+                    </form>
+                {% endif %}
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
